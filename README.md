@@ -4,4 +4,8 @@ Darkholme is a dungeon generator for roguelike/roguelite games.
 
 ## Documentation
 
-[Specifications](https://github.com/Eelinki/Darkholme-tiralabra2021/documentation/specifications.md)
+[Specifications](https://github.com/Eelinki/Darkholme-tiralabra2021/blob/main/documentation/specifications.md)
+
+## Weekly reports
+
+[Week 1](https://github.com/Eelinki/Darkholme-tiralabra2021/blob/main/documentation/weekly_reports/week1.md)

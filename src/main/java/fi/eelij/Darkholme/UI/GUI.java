@@ -14,7 +14,7 @@ public class GUI extends Application{
     public void start(Stage primaryStage) throws Exception {
         GridPane gp = new GridPane();
 
-        Generator g = new Generator(100, 100, 5693045);
+        Generator g = new Generator(200, 200);
         g.generate(10);
 
         this.imageView = new ImageView(g.generateImage(5));

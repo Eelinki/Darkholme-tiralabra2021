@@ -1,5 +1,8 @@
 # Darkholme
 
+![Java CI with Gradle](https://github.com/Eelinki/Darkholme-tiralabra2021/workflows/Java%20CI%20with%20Gradle/badge.svg)
+[![codecov](https://codecov.io/gh/Eelinki/Darkholme-tiralabra2021/branch/main/graph/badge.svg?token=FHRHUZ1Q0F)](https://codecov.io/gh/Eelinki/Darkholme-tiralabra2021)
+
 Darkholme is a dungeon generator for roguelike/roguelite games.
 
 ## Documentation

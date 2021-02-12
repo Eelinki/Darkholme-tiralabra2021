@@ -17,9 +17,9 @@ public class Generator {
     /**
      * Constructor
      *
-     * @param width Width of the map in pixels
+     * @param width  Width of the map in pixels
      * @param height Height of the map in pixels
-     * @param seed Seed to be used in the generation
+     * @param seed   Seed to be used in the generation
      */
     public Generator(int width, int height, int seed) {
         this.width = width;
@@ -37,8 +37,12 @@ public class Generator {
 
     /**
      * Generates the dungeon
+     *
+     * @param amount Amount of points to be generated
      */
     public void generate(int amount) {
+        this.data = new int[this.width][this.height];
+
         Point[] points = pointCloud(amount);
 
         Delaunay bw = new Delaunay(points, width, height);
@@ -49,12 +53,13 @@ public class Generator {
      * Randomly generate points into a two-dimensional array.
      *
      * @param amount The number of points to be generated.
+     * @return Array of points
      */
     private Point[] pointCloud(int amount) {
         Point[] points = new Point[amount];
 
         Random random;
-        if(seed != 0) {
+        if (seed != 0) {
             random = new Random(seed);
         } else {
             random = new Random();
@@ -78,12 +83,12 @@ public class Generator {
      * @return Generated image
      */
     public WritableImage generateImage(int scale) {
-        WritableImage image = new WritableImage(width*scale, height*scale);
+        WritableImage image = new WritableImage(width * scale, height * scale);
 
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 Color color;
-                if(data[i][j] == 1) {
+                if (data[i][j] == 1) {
                     color = new Color(0, 0, 0.5, 1);
                 } else {
                     color = new Color(0.9, 0.9, 0.7, 1);
@@ -91,8 +96,8 @@ public class Generator {
 
                 for (int k = 0; k < scale; k++) {
                     for (int l = 0; l < scale; l++) {
-                        image.getPixelWriter().setColor(i*scale+k, j*scale+k, color);
-                        image.getPixelWriter().setColor(i*scale+k, j*scale+l, color);
+                        image.getPixelWriter().setColor(i * scale + k, j * scale + k, color);
+                        image.getPixelWriter().setColor(i * scale + k, j * scale + l, color);
                     }
                 }
             }
@@ -103,11 +108,12 @@ public class Generator {
                 Color color = new Color(1, 0, 0.5, 1);
                 for (int k = 0; k < scale; k++) {
                     for (int l = 0; l < scale; l++) {
-                        if(p.x >= width || p.y >= height)
+                        if (p.x >= width || p.y >= height) {
                             continue;
+                        }
 
-                        image.getPixelWriter().setColor((int)p.x*scale+k, (int)p.y*scale+k, color);
-                        image.getPixelWriter().setColor((int)p.x*scale+k, (int)p.y*scale+l, color);
+                        image.getPixelWriter().setColor((int) p.x * scale + k, (int) p.y * scale + k, color);
+                        image.getPixelWriter().setColor((int) p.x * scale + k, (int) p.y * scale + l, color);
                     }
                 }
             }

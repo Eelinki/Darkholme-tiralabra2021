@@ -17,7 +17,7 @@ public class Edge {
     }
 
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         return this.hashCode() == o.hashCode();
     }
 }

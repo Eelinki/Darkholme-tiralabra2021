@@ -37,10 +37,10 @@ public class Delaunay {
         HashSet<Edge> edges = new HashSet<>();
         HashSet<Edge> toRemove = new HashSet<>();
 
-        for (int i = triangles.size()-1; i >= 0; i--) {
+        for (int i = triangles.size() - 1; i >= 0; i--) {
             Triangle tri = triangles.get(i);
 
-            if(tri.inCircum(p)) {
+            if (tri.inCircum(p)) {
                 badTriangles.add(tri);
                 triangles.remove(i);
             }
@@ -50,13 +50,13 @@ public class Delaunay {
             Edge e1 = new Edge(tri.points[0], tri.points[1]);
             Edge e2 = new Edge(tri.points[1], tri.points[2]);
             Edge e3 = new Edge(tri.points[0], tri.points[2]);
-            if(!edges.add(e1)) {
+            if (!edges.add(e1)) {
                 toRemove.add(e1);
             }
-            if(!edges.add(e2)) {
+            if (!edges.add(e2)) {
                 toRemove.add(e2);
             }
-            if(!edges.add(e3)) {
+            if (!edges.add(e3)) {
                 toRemove.add(e3);
             }
         }

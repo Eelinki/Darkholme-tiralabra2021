@@ -2,15 +2,13 @@ package fi.eelij.Darkholme.UI;
 
 import fi.eelij.Darkholme.Domain.Generator;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-public class GUI extends Application{
+public class GUI extends Application {
     private ImageView imageView;
 
     @Override
@@ -24,6 +22,11 @@ public class GUI extends Application{
         gp.add(this.imageView, 0, 0);
 
         Button generate = new Button("Generate");
+
+        generate.setOnAction(event -> {
+            g.generate(25);
+            this.imageView.setImage(g.generateImage(5));
+        });
 
         gp.add(generate, 0, 1);
 

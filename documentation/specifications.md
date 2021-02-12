@@ -13,10 +13,11 @@ It uses a combination of graph and pathfinding algorithms to generate a dungeon 
 1. Create randomly sized rooms for each of the points.
 1. Finally create the corridors between the rooms.
 
-Sources for inspiration:
+Sources:
 
 - [Procedural Dungeon Generation #2](https://github.com/a327ex/blog/issues/7) by a327ex and TinyKeepDev
 - [Making maps with noise functions](https://www.redblobgames.com/maps/terrain-from-noise/) by Red Blob Games
+- [Bowyer–Watson algorithm](https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm) Wikipedia
 
 ### Input data
 

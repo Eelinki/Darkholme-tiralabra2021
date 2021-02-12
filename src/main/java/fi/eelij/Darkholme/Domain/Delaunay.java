@@ -2,6 +2,7 @@ package fi.eelij.Darkholme.Domain;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 
 public class Delaunay {
     private ArrayList<Point> initialPoints;
@@ -29,6 +30,23 @@ public class Delaunay {
 
         for (Point p : points) {
             run(p);
+        }
+
+        //remove triangles that contains a vertex from the original super-triangle
+        Iterator<Triangle> iter = triangles.iterator();
+
+        while (iter.hasNext()) {
+            Triangle t = iter.next();
+
+            for (Point p : t.points) {
+                if (p == initialPoints.get(0)
+                        || p == initialPoints.get(1)
+                        || p == initialPoints.get(2)
+                        || p == initialPoints.get(3)) {
+                    iter.remove();
+                    break;
+                }
+            }
         }
     }
 

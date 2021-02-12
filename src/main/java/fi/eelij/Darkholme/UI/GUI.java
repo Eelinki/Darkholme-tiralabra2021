@@ -16,16 +16,16 @@ public class GUI extends Application {
         GridPane gp = new GridPane();
 
         Generator g = new Generator(200, 200);
-        g.generate(25);
+        g.generate(10);
 
-        this.imageView = new ImageView(g.generateImage(5));
+        this.imageView = new ImageView(g.generateImage(4));
         gp.add(this.imageView, 0, 0);
 
         Button generate = new Button("Generate");
 
         generate.setOnAction(event -> {
-            g.generate(25);
-            this.imageView.setImage(g.generateImage(5));
+            g.generate(10);
+            this.imageView.setImage(g.generateImage(4));
         });
 
         gp.add(generate, 0, 1);

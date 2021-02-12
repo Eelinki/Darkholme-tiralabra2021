@@ -9,10 +9,12 @@ plugins {
 group 'fi.eelij'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
-
 repositories {
     mavenCentral()
+}
+
+application {
+    mainClass = 'fi.eelij.Darkholme.Darkholme'
 }
 
 javafx {

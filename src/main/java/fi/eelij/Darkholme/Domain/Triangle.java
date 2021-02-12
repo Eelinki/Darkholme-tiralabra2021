@@ -10,24 +10,27 @@ public class Triangle {
         this.points[0] = p1;
         this.points[1] = p2;
         this.points[2] = p3;
-        this.center = getCircumcircle();
+        this.center = getCircumcenter();
         this.radius = getRadius();
     }
 
-    public Point getCircumcircle() {
-        double a = points[1].x - points[0].x;
-        double b = points[1].y - points[0].y;
-        double c = points[2].x - points[0].x;
-        double d = points[2].y - points[0].y;
-        double e = a * (points[0].x + points[1].x) + b * (points[0].y + points[1].y);
-        double f = c * (points[0].x + points[2].x) + d * (points[0].y + points[2].y);
-        double g = 2.0 * (a * (points[2].y - points[1].y) - b * (points[2].x - points[1].x));
-        if (g == 0) {
-            return null;
-        }
-        double px = (d * e - b * f) / g;
-        double py = (a * f - c * e) / g;
-        return new Point(px, py);
+    /**
+     * Calculate cartesian coordinates for circumcenter U
+     *
+     * @return Point circumcenter of triangle
+     */
+    public Point getCircumcenter() {
+        double ax = points[0].x;
+        double ay = points[0].y;
+        double bx = points[1].x;
+        double by = points[1].y;
+        double cx = points[2].x;
+        double cy = points[2].y;
+        double d = 2.0 * (ax * (by - cy) + bx * (cy - ay) + cx * (ay - by));
+        double ux = ((ax * ax + ay * ay) * (by - cy) + (bx * bx + by * by) * (cy - ay) + (cx * cx + cy * cy) * (ay - by)) / d;
+        double uy = ((ax * ax + ay * ay) * (cx - bx) + (bx * bx + by * by) * (ax - cx) + (cx * cx + cy * cy) * (bx - ax)) / d;
+
+        return new Point(ux, uy);
     }
 
     public double getRadius() {

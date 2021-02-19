@@ -47,6 +47,16 @@ public class Triangle {
         return Math.sqrt(x * x + y * y) < radius;
     }
 
+    public Edge[] getEdges() {
+        Edge[] edges = new Edge[3];
+
+        edges[0] = new Edge(points[0], points[1]);
+        edges[1] = new Edge(points[1], points[2]);
+        edges[2] = new Edge(points[0], points[2]);
+
+        return edges;
+    }
+
     @Override
     public String toString() {
         return "Triangle((" + points[0] + "), (" + points[1] + "), (" + points[2] + ")";

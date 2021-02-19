@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Random;
 
 public class Generator {
@@ -13,6 +14,7 @@ public class Generator {
     private int[][] data;
     private int seed;
     private ArrayList<Triangle> triangles;
+    private Point[] points;
 
     /**
      * Constructor
@@ -33,6 +35,7 @@ public class Generator {
         this.width = width;
         this.height = height;
         this.data = new int[this.width][this.height];
+        this.triangles = new ArrayList<>();
     }
 
     /**
@@ -44,9 +47,56 @@ public class Generator {
         this.data = new int[this.width][this.height];
 
         Point[] points = pointCloud(amount);
+        this.points = points;
 
         Delaunay bw = new Delaunay(points, width, height);
         this.triangles = bw.triangles;
+
+        HashSet<Edge> bwEdges = bw.getEdges();
+        MST k = new MST(bwEdges, new ArrayList<>(Arrays.asList(points)));
+        HashSet<Edge> mstEdges = k.getMST();
+
+        LineGenerator lg = new LineGenerator(this.data);
+
+        // Add few edges back from the Delaunay graph to create more corridors
+        Random r;
+        if (seed != 0) {
+            r = new Random(seed);
+        } else {
+            r = new Random();
+        }
+
+        for (Triangle t : triangles) {
+            for (Edge e : t.getEdges()) {
+                if (r.nextDouble() < 0.15) {
+                    lg.run(e);
+                }
+            }
+        }
+
+        for (Edge e : mstEdges) {
+            lg.run(e);
+        }
+
+        // Create rooms
+        for (Edge e : mstEdges) {
+            for (Point p : e.points) {
+
+                int roomX = r.nextInt(6) + 3;
+                int roomY = r.nextInt(6) + 3;
+                int roomW = r.nextInt(6) + 3;
+                int roomH = r.nextInt(6) + 3;
+
+                for (int i = (int) p.x - roomX; i < (int) p.x + roomW; i++) {
+                    for (int j = (int) p.y - roomY; j < (int) p.y + roomH; j++) {
+                        if (i < 0 || j < 0 || i > width - 1 || j > height - 1) {
+                            continue;
+                        }
+                        this.data[i][j] = 1;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -58,19 +108,18 @@ public class Generator {
     private Point[] pointCloud(int amount) {
         Point[] points = new Point[amount];
 
-        Random random;
+        Random r;
         if (seed != 0) {
-            random = new Random(seed);
+            r = new Random(seed);
         } else {
-            random = new Random();
+            r = new Random();
         }
 
         for (int i = 0; i < amount; i++) {
-            int x = random.nextInt((width - 2) + 1) + 1;
-            int y = random.nextInt((height - 2) + 1) + 1;
+            int x = r.nextInt((width - 2) + 1) + 1;
+            int y = r.nextInt((height - 2) + 1) + 1;
 
-            this.data[x][y] = 1;
-            points[i] = new Point(x, y);
+            points[i] = new Point(x, y, r.nextDouble());
         }
 
         return points;
@@ -89,9 +138,9 @@ public class Generator {
             for (int j = 0; j < width; j++) {
                 Color color;
                 if (data[i][j] == 1) {
-                    color = new Color(0, 0, 0.5, 1);
+                    color = new Color(1, 1, 1, 1);
                 } else {
-                    color = new Color(0.9, 0.9, 0.7, 1);
+                    color = new Color(0, 0, 0, 1);
                 }
 
                 for (int k = 0; k < scale; k++) {
@@ -103,26 +152,14 @@ public class Generator {
             }
         }
 
-        for (Triangle tri : triangles) {
-            for (Point p : tri.points) {
-                Color color = new Color(1, 0, 0.5, 1);
-                for (int k = 0; k < scale; k++) {
-                    for (int l = 0; l < scale; l++) {
-                        if (p.x >= width || p.y >= height) {
-                            continue;
-                        }
-
-                        image.getPixelWriter().setColor((int) p.x * scale + k, (int) p.y * scale + k, color);
-                        image.getPixelWriter().setColor((int) p.x * scale + k, (int) p.y * scale + l, color);
-                    }
-                }
-            }
-        }
-
         return image;
     }
 
     public String mapToString() {
         return Arrays.deepToString(this.data);
+    }
+
+    public String pointsToString() {
+        return Arrays.toString(this.points);
     }
 }

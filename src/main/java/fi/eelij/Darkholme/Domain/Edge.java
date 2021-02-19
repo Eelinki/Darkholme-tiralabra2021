@@ -1,6 +1,6 @@
 package fi.eelij.Darkholme.Domain;
 
-public class Edge {
+public class Edge implements Comparable<Edge> {
     public Point[] points;
     public double weight;
 
@@ -25,5 +25,16 @@ public class Edge {
     @Override
     public boolean equals(Object o) {
         return this.hashCode() == o.hashCode();
+    }
+
+    @Override
+    public int compareTo(Edge o) {
+        int compare = Double.compare(this.weight, o.weight);
+        return compare;
+    }
+
+    @Override
+    public String toString() {
+        return "Edge((" + points[0] + "), (" + points[1] + "))";
     }
 }

@@ -8,7 +8,7 @@ It uses a combination of graph and pathfinding algorithms to generate a dungeon 
 
 1. Generate a random point cloud in a 2d matrix (this could be improved to use poisson disk sampling).
 1. Create a graph using Delaunay triangulation (Bowyer-Watson).
-1. Find the graphs minimum spanning tree (Prim).
+1. Find the graphs minimum spanning tree (Kruskal).
 1. Add few edges back from the Delaunay graph to create more corridors, resulting in a less linear dungeon.
 1. Create randomly sized rooms for each of the points.
 1. Finally create the corridors between the rooms.

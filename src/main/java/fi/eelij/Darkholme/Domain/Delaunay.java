@@ -88,4 +88,16 @@ public class Delaunay {
             triangles.add(tri);
         }
     }
+
+    public HashSet<Edge> getEdges() {
+        HashSet<Edge> edges = new HashSet<>();
+
+        for (Triangle t : triangles) {
+            for (Edge e : t.getEdges()) {
+                edges.add(e);
+            }
+        }
+
+        return edges;
+    }
 }

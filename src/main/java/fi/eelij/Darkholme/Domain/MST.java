@@ -1,27 +1,34 @@
 package fi.eelij.Darkholme.Domain;
 
+import fi.eelij.Darkholme.Util.CustomList;
+
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 public class MST {
     public ArrayList<Edge> edges;
-    public ArrayList<Point> points;
-    private HashSet<Edge> mst;
-    private ArrayList<HashSet<Point>> subsets;
+    public CustomList<Point> points;
+    private LinkedHashSet<Edge> mst;
+    private CustomList<LinkedHashSet<Point>> subsets;
 
-    public MST(HashSet<Edge> edges, ArrayList<Point> points) {
+    public MST(LinkedHashSet<Edge> edges, CustomList<Point> points) {
         this.points = points;
-        this.edges = new ArrayList<>(edges);
-        this.mst = new HashSet<>();
-        this.subsets = new ArrayList<>();
+        this.edges = new ArrayList<>();
+
+        for (Edge e : edges) {
+            this.edges.add(e);
+        }
+
+        this.mst = new LinkedHashSet<>();
+        this.subsets = new CustomList<>();
     }
 
-    public HashSet<Edge> getMST() {
+    public LinkedHashSet<Edge> getMST() {
         Collections.sort(this.edges);
 
         for (Point p : points) {
-            HashSet<Point> set = new HashSet<>();
+            LinkedHashSet<Point> set = new LinkedHashSet<>();
             set.add(p);
             subsets.add(set);
         }
@@ -53,15 +60,15 @@ public class MST {
     }
 
     private void union(int subsetA, int subsetB) {
-        HashSet<Point> union = subsets.get(subsetA);
+        LinkedHashSet<Point> union = subsets.get(subsetA);
         union.addAll(subsets.get(subsetB));
 
         if (subsetB > subsetA) {
-            subsets.remove(subsetB);
-            subsets.remove(subsetA);
+            subsets.remove(subsets.get(subsetB));
+            subsets.remove(subsets.get(subsetA));
         } else {
-            subsets.remove(subsetA);
-            subsets.remove(subsetB);
+            subsets.remove(subsets.get(subsetA));
+            subsets.remove(subsets.get(subsetB));
         }
 
         subsets.add(union);

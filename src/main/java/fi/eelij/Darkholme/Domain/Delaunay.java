@@ -1,16 +1,17 @@
 package fi.eelij.Darkholme.Domain;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import fi.eelij.Darkholme.Util.CustomList;
+
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 
 public class Delaunay {
-    private ArrayList<Point> initialPoints;
-    public ArrayList<Triangle> triangles;
+    private CustomList<Point> initialPoints;
+    public CustomList<Triangle> triangles;
 
     public Delaunay(Point[] points, int width, int height) {
-        this.initialPoints = new ArrayList<>();
-        this.triangles = new ArrayList<>();
+        this.initialPoints = new CustomList<>();
+        this.triangles = new CustomList<>();
 
         Point a = new Point(0, 0);
         Point b = new Point(0, height);
@@ -33,6 +34,7 @@ public class Delaunay {
         }
 
         //remove triangles that contains a vertex from the original super-triangle
+        CustomList<Triangle> finalTriangles = new CustomList<>();
         Iterator<Triangle> iter = triangles.iterator();
 
         while (iter.hasNext()) {
@@ -45,22 +47,27 @@ public class Delaunay {
                         || p == initialPoints.get(3)) {
                     iter.remove();
                     break;
+                } else {
+                    finalTriangles.add(t);
+                    break;
                 }
             }
         }
+
+        triangles = finalTriangles;
     }
 
     public void run(Point p) {
-        ArrayList<Triangle> badTriangles = new ArrayList<>();
-        HashSet<Edge> edges = new HashSet<>();
-        HashSet<Edge> toRemove = new HashSet<>();
+        CustomList<Triangle> badTriangles = new CustomList<>();
+        LinkedHashSet<Edge> edges = new LinkedHashSet<>();
+        LinkedHashSet<Edge> toRemove = new LinkedHashSet<>();
 
         for (int i = triangles.size() - 1; i >= 0; i--) {
             Triangle tri = triangles.get(i);
 
             if (tri.inCircum(p)) {
                 badTriangles.add(tri);
-                triangles.remove(i);
+                triangles.remove(triangles.get(i));
             }
         }
 
@@ -89,8 +96,8 @@ public class Delaunay {
         }
     }
 
-    public HashSet<Edge> getEdges() {
-        HashSet<Edge> edges = new HashSet<>();
+    public LinkedHashSet<Edge> getEdges() {
+        LinkedHashSet<Edge> edges = new LinkedHashSet<>();
 
         for (Triangle t : triangles) {
             for (Edge e : t.getEdges()) {

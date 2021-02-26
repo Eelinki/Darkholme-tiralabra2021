@@ -15,6 +15,25 @@ public class Point {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        final Point comparePoint = (Point) obj;
+
+        if(this.x != comparePoint.x || this.y != comparePoint.y || this.value != comparePoint.value) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
     public String toString() {
         return x + ", " + y;
     }

@@ -1,20 +1,21 @@
 package fi.eelij.Darkholme.Domain;
 
+import fi.eelij.Darkholme.Util.CustomList;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Random;
 
 public class Generator {
     private int width;
     private int height;
     private int[][] data;
-    private int seed;
-    private ArrayList<Triangle> triangles;
+    private CustomList<Triangle> triangles;
     private Point[] points;
+    private Random r;
+    private long seed;
 
     /**
      * Constructor
@@ -23,19 +24,19 @@ public class Generator {
      * @param height Height of the map in pixels
      * @param seed   Seed to be used in the generation
      */
-    public Generator(int width, int height, int seed) {
+    public Generator(int width, int height, long seed) {
         this.width = width;
         this.height = height;
         this.data = new int[this.width][this.height];
+        this.triangles = new CustomList<>();
         this.seed = seed;
-        this.triangles = new ArrayList<>();
     }
 
     public Generator(int width, int height) {
         this.width = width;
         this.height = height;
         this.data = new int[this.width][this.height];
-        this.triangles = new ArrayList<>();
+        this.triangles = new CustomList<>();
     }
 
     /**
@@ -44,28 +45,36 @@ public class Generator {
      * @param amount Amount of points to be generated
      */
     public void generate(int amount) {
+        if(this.seed != 0) {
+            this.r = new Random(seed);
+        } else {
+            this.r = new Random();
+        }
+
         this.data = new int[this.width][this.height];
 
         Point[] points = pointCloud(amount);
         this.points = points;
 
-        Delaunay bw = new Delaunay(points, width, height);
-        this.triangles = bw.triangles;
+        CustomList<Point> pointsList = new CustomList<>();
 
-        HashSet<Edge> bwEdges = bw.getEdges();
-        MST k = new MST(bwEdges, new ArrayList<>(Arrays.asList(points)));
-        HashSet<Edge> mstEdges = k.getMST();
+        for (Point p : points) {
+            pointsList.add(p);
+        }
+
+        Delaunay bw = new Delaunay(points, width, height);
+        this.triangles = new CustomList<>();
+        for (Triangle t : bw.triangles) {
+            this.triangles.add(t);
+        }
+
+        LinkedHashSet<Edge> bwEdges = bw.getEdges();
+        MST k = new MST(bwEdges, pointsList);
+        LinkedHashSet<Edge> mstEdges = k.getMST();
 
         LineGenerator lg = new LineGenerator(this.data);
 
         // Add few edges back from the Delaunay graph to create more corridors
-        Random r;
-        if (seed != 0) {
-            r = new Random(seed);
-        } else {
-            r = new Random();
-        }
-
         for (Triangle t : triangles) {
             for (Edge e : t.getEdges()) {
                 if (r.nextDouble() < 0.15) {
@@ -107,13 +116,6 @@ public class Generator {
      */
     private Point[] pointCloud(int amount) {
         Point[] points = new Point[amount];
-
-        Random r;
-        if (seed != 0) {
-            r = new Random(seed);
-        } else {
-            r = new Random();
-        }
 
         for (int i = 0; i < amount; i++) {
             int x = r.nextInt((width - 2) + 1) + 1;

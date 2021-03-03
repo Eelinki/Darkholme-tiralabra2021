@@ -26,7 +26,7 @@ public class Point {
 
         final Point comparePoint = (Point) obj;
 
-        if(this.x != comparePoint.x || this.y != comparePoint.y || this.value != comparePoint.value) {
+        if (this.x != comparePoint.x || this.y != comparePoint.y || this.value != comparePoint.value) {
             return false;
         }
 

@@ -45,7 +45,7 @@ public class Generator {
      * @param amount Amount of points to be generated
      */
     public void generate(int amount) {
-        if(this.seed != 0) {
+        if (this.seed != 0) {
             this.r = new Random(seed);
         } else {
             this.r = new Random();

@@ -2,22 +2,22 @@ package fi.eelij.Darkholme.Domain;
 
 import fi.eelij.Darkholme.Util.CustomList;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 
 public class MST {
-    public ArrayList<Edge> edges;
+    public Edge[] edges;
     public CustomList<Point> points;
     private LinkedHashSet<Edge> mst;
     private CustomList<LinkedHashSet<Point>> subsets;
 
     public MST(LinkedHashSet<Edge> edges, CustomList<Point> points) {
         this.points = points;
-        this.edges = new ArrayList<>();
+        this.edges = new Edge[edges.size()];
 
+        int index = 0;
         for (Edge e : edges) {
-            this.edges.add(e);
+            this.edges[index] = e;
+            index++;
         }
 
         this.mst = new LinkedHashSet<>();
@@ -25,7 +25,15 @@ public class MST {
     }
 
     public LinkedHashSet<Edge> getMST() {
-        Collections.sort(this.edges);
+        for (int i = 0; i < this.edges.length - 1; i++) {
+            for (int j = 0; j < this.edges.length - i - 1; j++) {
+                if (this.edges[j].compareTo(this.edges[j + 1]) > 0) {
+                    Edge temp = this.edges[j];
+                    this.edges[j] = this.edges[j + 1];
+                    this.edges[j + 1] = temp;
+                }
+            }
+        }
 
         for (Point p : points) {
             LinkedHashSet<Point> set = new LinkedHashSet<>();
@@ -33,9 +41,9 @@ public class MST {
             subsets.add(set);
         }
 
-        for (int i = 0; i < edges.size(); i++) {
-            Point p0 = edges.get(i).points[0];
-            Point p1 = edges.get(i).points[1];
+        for (Edge edge : edges) {
+            Point p0 = edge.points[0];
+            Point p1 = edge.points[1];
 
             int subsetA = 0, subsetB = 0;
 
@@ -50,7 +58,7 @@ public class MST {
             }
 
             if (subsetA != subsetB) {
-                mst.add(edges.get(i));
+                mst.add(edge);
 
                 union(subsetA, subsetB);
             }

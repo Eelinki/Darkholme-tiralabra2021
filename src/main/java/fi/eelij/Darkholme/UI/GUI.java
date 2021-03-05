@@ -19,7 +19,7 @@ public class GUI extends Application {
         GridPane controls = new GridPane();
         pointAmount = 50;
 
-        Generator g = new Generator(200, 200, 6969420);
+        Generator g = new Generator(200, 200);
         g.generate(pointAmount);
 
         this.imageView = new ImageView(g.generateImage(4));

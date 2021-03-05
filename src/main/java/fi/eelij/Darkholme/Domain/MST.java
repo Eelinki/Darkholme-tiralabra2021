@@ -72,11 +72,11 @@ public class MST {
         union.addAll(subsets.get(subsetB));
 
         if (subsetB > subsetA) {
-            subsets.remove(subsets.get(subsetB));
-            subsets.remove(subsets.get(subsetA));
+            subsets.remove(subsetB);
+            subsets.remove(subsetA);
         } else {
-            subsets.remove(subsets.get(subsetA));
-            subsets.remove(subsets.get(subsetB));
+            subsets.remove(subsetA);
+            subsets.remove(subsetB);
         }
 
         subsets.add(union);

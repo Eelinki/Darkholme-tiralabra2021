@@ -24,7 +24,7 @@ public class CustomList<T> implements Iterable<T> {
     public boolean remove(T obj) {
         boolean removed = false;
 
-        for (int i = 0; i < this.list.length - 1; i++) {
+        for (int i = 0; i < this.list.length; i++) {
             if (this.list[i] == obj) {
                 this.list[i] = null;
                 removed = true;
@@ -32,7 +32,7 @@ public class CustomList<T> implements Iterable<T> {
                 i++;
             }
 
-            if (removed) {
+            if (removed && i < this.list.length) {
                 this.list[i - 1] = this.list[i];
             }
         }
@@ -42,7 +42,32 @@ public class CustomList<T> implements Iterable<T> {
         return removed;
     }
 
-    private void shrink() {
+    public boolean remove(int index) {
+        boolean removed = false;
+
+        for (int i = 0; i < this.list.length; i++) {
+            if (i == index) {
+                this.list[i] = null;
+                removed = true;
+                pointer--;
+                i++;
+            }
+
+            if (removed && i < this.list.length) {
+                this.list[i - 1] = this.list[i];
+            }
+        }
+
+        shrink();
+
+        return removed;
+    }
+
+    private boolean shrink() {
+        if (this.list.length <= 8) {
+            return false;
+        }
+
         if (this.pointer < this.list.length / 2) {
             Object[] newList = new Object[this.list.length / 2];
 
@@ -52,6 +77,8 @@ public class CustomList<T> implements Iterable<T> {
 
             this.list = newList;
         }
+
+        return true;
     }
 
     private void checkSize() {
@@ -100,5 +127,9 @@ public class CustomList<T> implements Iterable<T> {
         };
 
         return iter;
+    }
+
+    public Object[] getList() {
+        return list;
     }
 }

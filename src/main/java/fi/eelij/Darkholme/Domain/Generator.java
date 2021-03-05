@@ -15,22 +15,13 @@ public class Generator {
     private CustomList<Triangle> triangles;
     private Point[] points;
     private Random r;
-    private long seed;
 
     /**
      * Constructor
      *
      * @param width  Width of the map in pixels
      * @param height Height of the map in pixels
-     * @param seed   Seed to be used in the generation
      */
-    public Generator(int width, int height, long seed) {
-        this.width = width;
-        this.height = height;
-        this.data = new int[this.width][this.height];
-        this.triangles = new CustomList<>();
-        this.seed = seed;
-    }
 
     public Generator(int width, int height) {
         this.width = width;
@@ -44,8 +35,8 @@ public class Generator {
      *
      * @param amount Amount of points to be generated
      */
-    public void generate(int amount) {
-        if (this.seed != 0) {
+    public void generate(int amount, long seed, double corridorPercentage) {
+        if (seed != 0) {
             this.r = new Random(seed);
         } else {
             this.r = new Random();
@@ -77,7 +68,7 @@ public class Generator {
         // Add few edges back from the Delaunay graph to create more corridors
         for (Triangle t : triangles) {
             for (Edge e : t.getEdges()) {
-                if (r.nextDouble() < 0.15) {
+                if (r.nextDouble() < corridorPercentage) {
                     lg.run(e);
                 }
             }

@@ -14,8 +14,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.List;
-
 public class GUI extends Application {
     private ImageView imageView;
     private int pointAmount;

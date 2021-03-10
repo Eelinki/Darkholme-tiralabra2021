@@ -1,11 +1,11 @@
 package fi.eelij.Darkholme.Domain;
 
 import fi.eelij.Darkholme.Util.CustomList;
+import fi.eelij.Darkholme.Util.UniqueList;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
 import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.Random;
 
 public class Generator {
@@ -59,9 +59,9 @@ public class Generator {
             this.triangles.add(t);
         }
 
-        LinkedHashSet<Edge> bwEdges = bw.getEdges();
+        UniqueList<Edge> bwEdges = bw.getEdges();
         MST k = new MST(bwEdges, pointsList);
-        LinkedHashSet<Edge> mstEdges = k.getMST();
+        UniqueList<Edge> mstEdges = k.getMST();
 
         LineGenerator lg = new LineGenerator(this.data);
 

@@ -4,8 +4,8 @@ import java.util.Iterator;
 
 @SuppressWarnings("unchecked")
 public class CustomList<T> implements Iterable<T> {
-    private Object[] list;
-    private int pointer;
+    protected Object[] list;
+    protected int pointer;
 
     public CustomList() {
         this.list = new Object[8];
@@ -63,7 +63,7 @@ public class CustomList<T> implements Iterable<T> {
         return removed;
     }
 
-    private boolean shrink() {
+    protected boolean shrink() {
         if (this.list.length <= 8) {
             return false;
         }
@@ -81,7 +81,7 @@ public class CustomList<T> implements Iterable<T> {
         return true;
     }
 
-    private void checkSize() {
+    protected void checkSize() {
         if (this.pointer >= this.list.length) {
             grow();
         }
@@ -130,6 +130,10 @@ public class CustomList<T> implements Iterable<T> {
     }
 
     public Object[] getList() {
-        return list;
+        Object[] returnList = new Object[this.pointer];
+        for (int i = 0; i < this.pointer; i++) {
+            returnList[i] = this.list[i];
+        }
+        return returnList;
     }
 }

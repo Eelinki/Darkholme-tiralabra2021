@@ -1,16 +1,15 @@
 package fi.eelij.Darkholme.Domain;
 
 import fi.eelij.Darkholme.Util.CustomList;
-
-import java.util.LinkedHashSet;
+import fi.eelij.Darkholme.Util.UniqueList;
 
 public class MST {
     public Edge[] edges;
     public CustomList<Point> points;
-    private LinkedHashSet<Edge> mst;
-    private CustomList<LinkedHashSet<Point>> subsets;
+    private UniqueList<Edge> mst;
+    private CustomList<UniqueList<Point>> subsets;
 
-    public MST(LinkedHashSet<Edge> edges, CustomList<Point> points) {
+    public MST(UniqueList<Edge> edges, CustomList<Point> points) {
         this.points = points;
         this.edges = new Edge[edges.size()];
 
@@ -20,11 +19,11 @@ public class MST {
             index++;
         }
 
-        this.mst = new LinkedHashSet<>();
+        this.mst = new UniqueList<>();
         this.subsets = new CustomList<>();
     }
 
-    public LinkedHashSet<Edge> getMST() {
+    public UniqueList<Edge> getMST() {
         for (int i = 0; i < this.edges.length - 1; i++) {
             for (int j = 0; j < this.edges.length - i - 1; j++) {
                 if (this.edges[j].compareTo(this.edges[j + 1]) > 0) {
@@ -36,7 +35,7 @@ public class MST {
         }
 
         for (Point p : points) {
-            LinkedHashSet<Point> set = new LinkedHashSet<>();
+            UniqueList<Point> set = new UniqueList<>();
             set.add(p);
             subsets.add(set);
         }
@@ -68,8 +67,10 @@ public class MST {
     }
 
     private void union(int subsetA, int subsetB) {
-        LinkedHashSet<Point> union = subsets.get(subsetA);
-        union.addAll(subsets.get(subsetB));
+        UniqueList<Point> union = subsets.get(subsetA);
+        for (Point p : subsets.get(subsetB)) {
+            union.add(p);
+        }
 
         if (subsetB > subsetA) {
             subsets.remove(subsetB);

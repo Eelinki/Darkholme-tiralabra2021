@@ -1,9 +1,9 @@
 package fi.eelij.Darkholme.Domain;
 
 import fi.eelij.Darkholme.Util.CustomList;
+import fi.eelij.Darkholme.Util.UniqueList;
 
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 
 public class Delaunay {
     private CustomList<Point> initialPoints;
@@ -59,8 +59,8 @@ public class Delaunay {
 
     public void run(Point p) {
         CustomList<Triangle> badTriangles = new CustomList<>();
-        LinkedHashSet<Edge> edges = new LinkedHashSet<>();
-        LinkedHashSet<Edge> toRemove = new LinkedHashSet<>();
+        UniqueList<Edge> edges = new UniqueList<>();
+        CustomList<Edge> toRemove = new CustomList<>();
 
         for (int i = triangles.size() - 1; i >= 0; i--) {
             Triangle tri = triangles.get(i);
@@ -96,8 +96,8 @@ public class Delaunay {
         }
     }
 
-    public LinkedHashSet<Edge> getEdges() {
-        LinkedHashSet<Edge> edges = new LinkedHashSet<>();
+    public UniqueList<Edge> getEdges() {
+        UniqueList<Edge> edges = new UniqueList<>();
 
         for (Triangle t : triangles) {
             for (Edge e : t.getEdges()) {

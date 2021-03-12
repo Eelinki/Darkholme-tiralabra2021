@@ -21,8 +21,6 @@ public class Generator {
      */
 
     public Generator() {
-        this.width = width;
-        this.height = height;
         this.data = new int[this.width][this.height];
         this.triangles = new CustomList<>();
     }

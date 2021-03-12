@@ -18,12 +18,9 @@ public class Generator {
 
     /**
      * Constructor
-     *
-     * @param width  Width of the map in pixels
-     * @param height Height of the map in pixels
      */
 
-    public Generator(int width, int height) {
+    public Generator() {
         this.width = width;
         this.height = height;
         this.data = new int[this.width][this.height];
@@ -34,13 +31,20 @@ public class Generator {
      * Generates the dungeon
      *
      * @param amount Amount of points to be generated
+     * @param seed  Seed used for the generation
+     * @param corridorPercentage Percentage of corridors
+     * @param width  Width of the map in pixels
+     * @param height Height of the map in pixels
      */
-    public void generate(int amount, long seed, double corridorPercentage) {
+    public void generate(int amount, long seed, double corridorPercentage, int width, int height) {
         if (seed != 0) {
             this.r = new Random(seed);
         } else {
             this.r = new Random();
         }
+
+        this.width = width;
+        this.height = height;
 
         this.data = new int[this.width][this.height];
 
@@ -127,8 +131,8 @@ public class Generator {
     public WritableImage generateImage(int scale) {
         WritableImage image = new WritableImage(width * scale, height * scale);
 
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 Color color;
                 if (data[i][j] == 1) {
                     color = new Color(1, 1, 1, 1);

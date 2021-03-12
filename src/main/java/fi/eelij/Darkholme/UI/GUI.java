@@ -19,6 +19,9 @@ public class GUI extends Application {
     private int pointAmount;
     private long seed;
     private double corridorPercentage;
+    private int width;
+    private int height;
+    private int scale;
 
     @Override
     public void start(Stage primaryStage) {
@@ -27,18 +30,41 @@ public class GUI extends Application {
         pointAmount = 50;
         seed = 0;
         corridorPercentage = 0.15;
+        width = 200;
+        height = 200;
+        scale = 4;
 
-        Generator g = new Generator(200, 200);
-        g.generate(pointAmount, seed, corridorPercentage);
+        Generator g = new Generator();
+        g.generate(pointAmount, seed, corridorPercentage, width, height);
 
-        this.imageView = new ImageView(g.generateImage(4));
+        this.imageView = new ImageView(g.generateImage(scale));
         gp.add(this.imageView, 1, 0);
 
         Button generateButton = new Button("Generate");
 
         generateButton.setOnAction(event -> {
-            g.generate(pointAmount, seed, corridorPercentage);
-            this.imageView.setImage(g.generateImage(4));
+            g.generate(pointAmount, seed, corridorPercentage, width, height);
+            this.imageView.setImage(g.generateImage(scale));
+        });
+
+        Label widthFieldLabel = new Label("Width");
+        TextField widthField = new TextField(Integer.toString(width));
+        widthField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                widthField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+
+            width = Integer.parseInt(widthField.getText());
+        });
+
+        Label heightFieldLabel = new Label("Height");
+        TextField heightField = new TextField(Integer.toString(height));
+        heightField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                heightField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+
+            height = Integer.parseInt(heightField.getText());
         });
 
         Label pointAmountFieldLabel = new Label("Points");
@@ -70,7 +96,22 @@ public class GUI extends Application {
 
         corridorPercentageValueLabel.textProperty().bind(Bindings.format("%.2f", corridorPercentageSlider.valueProperty()));
 
+        Label scaleLabel = new Label("Scale");
+        Label scaleValueLabel = new Label();
+        Slider scaleSlider = new Slider(1, 4, 4);
+        scaleSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            scale = (int) scaleSlider.valueProperty().get();
+        });
+
+        scaleValueLabel.textProperty().bind(Bindings.format("%.0f", scaleSlider.valueProperty()));
+
         controls.getChildren().add(generateButton);
+
+        controls.getChildren().add(widthFieldLabel);
+        controls.getChildren().add(widthField);
+
+        controls.getChildren().add(heightFieldLabel);
+        controls.getChildren().add(heightField);
 
         controls.getChildren().add(pointAmountFieldLabel);
         controls.getChildren().add(pointAmountField);
@@ -81,6 +122,10 @@ public class GUI extends Application {
         controls.getChildren().add(corridorPercentageLabel);
         controls.getChildren().add(corridorPercentageSlider);
         controls.getChildren().add(corridorPercentageValueLabel);
+
+        controls.getChildren().add(scaleLabel);
+        controls.getChildren().add(scaleSlider);
+        controls.getChildren().add(scaleValueLabel);
 
         controls.setPadding(new Insets(10, 10, 10, 10));
         controls.setSpacing(5);
